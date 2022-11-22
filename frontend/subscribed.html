@@ -1,0 +1,529 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Get email notifications the minute a vaccination appointment opens in Ontario.">
+  <meta name="keywords" content="covid, coronavirus, vaccine, appointment, ontario, notification, email">
+  <meta name="author" content="James Heaney">
+  <title>FindMyVax | Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+  <link href="assets/css/all.css" rel="stylesheet"> <!--load all styles -->
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <style>
+
+  .gradient {
+    background: rgb(69,109,255);
+    background: linear-gradient(345deg, rgba(69,109,255,1) 0%, rgba(125,200,255,1) 100%);
+  }
+
+  .mobile {
+    display: none;
+  }
+  .desktop {
+    display: flex;
+  }
+
+  .inner-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+  }
+
+  .content-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .card {
+    display: flex;
+    display: 1;
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    min-height: 500px;
+    width: 60%;
+    background-color: #ffffff;
+    border-radius: 40px;
+    min-width: 400px;
+    -webkit-box-shadow: 3px 1px 12px rgba(0,0,0,0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 1px 12px rgba(0,0,0,0.2);  /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 1px 12px rgba(0,0,0,0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  }
+
+  .card-row {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+  }
+
+  h1 {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+  }
+
+  h4 {
+    font-size: 4em;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+  }
+
+  h5 {
+    font-size: 1.5em;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+  }
+
+  .invisible-card {
+    margin: 50px;
+  }
+
+  .dashboard-button {
+    margin-top: 20px;
+    width: 160px;
+    height: 2.4em;
+    border-radius: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 3px 1px 12px rgba(0,0,0,0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 1px 12px rgba(0,0,0,0.2);  /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 1px 12px rgba(0,0,0,0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    cursor: pointer;
+  }
+
+  .notify-button {
+    width: 180px;
+    height: 2.4em;
+    border-radius: 20px;
+    background-color: #5081ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 3px 1px 12px rgba(0,0,0,0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 1px 12px rgba(0,0,0,0.2);  /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 1px 12px rgba(0,0,0,0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    cursor: pointer;
+  }
+
+  .dashboard-inputs {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 300;
+    color: black;
+    width: 140px;
+    height: 2.4em;
+    border-radius: 20px;
+    background-color: #c7c7c7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    outline: none;
+  }
+
+  .dashboard-input-buttons {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 300;
+    color: black;
+    width: auto;
+    height: 2.4em;
+    width: 80px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+
+  .location-card {
+    border-radius: 20px;
+    background-color: #ffffff;
+    -webkit-box-shadow: 2px 1px 8px rgba(0,0,0,0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    2px 1px 8px rgba(0,0,0,0.2);  /* Firefox 3.5 - 3.6 */
+    box-shadow:         2px 1px 8px rgba(0,0,0,0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  }
+
+  a {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+  }
+
+
+  @media only screen and (max-width: 1000px) {
+    body {
+      background: #fff;
+    }
+    .mobile {
+      display: none;
+      background: #fff;
+    }
+    .desktop {
+      display: flex;
+    }
+    h4 {
+      font-size: 2.5em;
+      font-family: 'Mulish', sans-serif;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+    }
+    h5 {
+      font-size: 1em;
+      font-family: 'Mulish', sans-serif;
+      font-weight: 300;
+      margin: 0;
+      padding: 0;
+    }
+
+    p {
+      font-family: 'Mulish', sans-serif;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
+    }
+    .invisible-card {
+      margin: 20px;
+    }
+    .dashboard-button {
+      margin-top: 20px;
+      width: 140px;
+      height: 2em;
+      border-radius: 20px;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-box-shadow: 3px 1px 12px rgba(0,0,0,0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+      -moz-box-shadow:    3px 1px 12px rgba(0,0,0,0.2);  /* Firefox 3.5 - 3.6 */
+      box-shadow:         3px 1px 12px rgba(0,0,0,0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+      cursor: pointer;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 40px;
+      height: auto;
+      min-height: 500px;
+      width: 95%;
+      max-width: 500px;
+      padding: 0;
+      padding-top: 20px;
+      border-radius: 80px;
+      min-width: 0;
+      background-color: #ffffff;
+      -webkit-box-shadow: none;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+      -moz-box-shadow:    none;  /* Firefox 3.5 - 3.6 */
+      box-shadow:         none;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+    }
+
+    .card-row {
+      display: flex;
+      flex-direction: column;
+      padding-left: 10px;
+      padding-top: 25px;
+      padding-bottom: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  .emphasis {
+    font-weight: 700;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  textarea:focus, input:focus{
+      outline: none;
+  }
+
+.form__label {
+  font-family: 'Mulish', sans-serif;
+  font-size: 0.8rem;
+  margin-left: 2rem;
+  margin-top: 0.3rem;
+  display: block;
+  transition: all 0.3s;
+  transform: translateY(-3.7rem);
+}
+
+.form__input {
+  font-family: 'Mulish', sans-serif;
+  color: #333;
+  font-size: 1rem;
+	margin: 0 auto;
+  padding: 0.4em;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 90%;
+  display: block;
+  border-bottom: 0.3rem solid transparent;
+  transition: all 0.3s;
+}
+
+.form__input:placeholder-shown + .form__label {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transform: translateY(-4rem);
+  transform: translateY(-4rem);
+}
+
+.value {
+  font-family: 'Mulish', sans-serif;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  letter-spacing: -.07em;
+  text-shadow: white 2px 2px 2px;
+}
+input[type="range"] {
+  display: block;
+  -webkit-appearance: none;
+  background-color: #bdc3c7;
+  width: 80%;
+  height: 5px;
+  border-radius: 5px;
+  margin: 0 auto;
+  outline: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: #5081ff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}​
+  input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: white;
+    border: 2px solid #e74c3c;
+  }
+  input[type="range"]::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+  }
+
+
+/*
+=====
+CORE STYLES
+=====
+*/
+
+.toggle{
+  --uiToggleSize: var(--toggleSize, 1.25rem);
+  --uiToggleBorderWidth: var(--toggleBorderWidth, 2px);
+  --uiToggleColor: var(--toggleColor, #5081ff);
+
+  display: var(--toggleDisplay, inline-flex);
+  position: relative;
+}
+
+.toggle__input{
+  width: var(--uiToggleSize);
+  height: var(--uiToggleSize);
+  opacity: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+}
+
+.toggle__label{
+  display: inline-flex;
+  min-height: var(--uiToggleSize);
+  padding-left: calc(var(--uiToggleSize) + var(--toggleIndent, .4em));
+}
+
+.toggle__input:not(:disabled) ~ .toggle__label{
+  cursor: pointer;
+}
+
+/*
+1. Ems helps to calculate size of the checkbox
+*/
+
+.toggle__label::after{
+  content: "";
+  box-sizing: border-box;
+  width: 1em;
+  height: 1em;
+  font-size: var(--uiToggleSize); /* 1 */
+
+  background-color: transparent;
+  border: var(--uiToggleBorderWidth) solid var(--uiToggleColor);
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.toggle__input:checked ~ .toggle__label::after{
+  background-color: var(--uiToggleColor);
+}
+
+.toggle__text{
+  font-family: 'Mulish', sans-serif;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/*
+The arrow size and position depends from sizes of square because I needed an arrow correct positioning from the top left corner of the element toggle
+
+1. Ems helps to calculate size and position of the arrow
+*/
+
+.toggle__label::before{
+  content: "";
+  width: 0;
+  height: 0;
+  font-size: var(--uiToggleSize); /* 1 */
+
+  border-left-width: 0;
+  border-bottom-width: 0;
+  border-left-style: solid;
+  border-bottom-style: solid;
+  border-color: var(--toggleArrowColor, #fff);
+
+  position: absolute;
+  top: .5428em;
+  left: .25em;
+  z-index: 3;
+
+  transform-origin: left top;
+  transform: rotate(-40deg) skew(10deg);
+}
+
+.toggle__input:checked ~ .toggle__label::before{
+  --uiToggleArrowWidth: var(--toggleArrowWidth, 2px);
+
+  width: .4em;
+  height: .2em;
+  border-left-width: var(--uiToggleArrowWidth);
+  border-bottom-width: var(--uiToggleArrowWidth);
+}
+
+
+/*
+=====
+PRESENTATION STYLES
+=====
+*/
+
+/*
+The demo skin
+*/
+
+.toggle__label::after{
+  border-radius: var(--toggleBorderRadius, 2px);
+}
+
+/*
+The animation of switching states
+*/
+
+.toggle__input:not(:disabled) ~ .toggle__label::before{
+  will-change: width, height;
+  opacity: 0;
+}
+
+.toggle__input:not(:disabled):checked ~ .toggle__label::before{
+  opacity: 1;
+  transition: opacity .1s ease-out .1s, width .1s ease-out .1s, height .2s ease-out .1s;
+}
+
+.toggle__input:not(:disabled) ~ .toggle__label::after{
+  will-change: background-color;
+  transition: background-color .05s ease-out;
+}
+
+/*
+=====
+SETTINGS
+=====
+*/
+
+.page__custom-settings{
+  --toggleColor: #5081ff;
+  --toggleOutlineColorFocus: #5081ff;
+  --toggleSize: 1rem;
+}
+
+
+/*
+=====
+DEMO
+=====
+*/
+.page__toggle{
+  margin-top: 0.75rem;
+  margin-right: 1.5rem;
+  font-size: var(--pageToggleTextFontSize);
+  border: none;
+  outline: none;
+}
+
+  </style>
+<head>
+<body style="margin: 0; display: flex;">
+  <div style="display: flex; flex: 1; flex-direction: column;">
+    <!---Nav--->
+    <div style="height: 80px; width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+      <div>
+        <img src="assets/logo.png" style="width: auto; height: 100%;" />
+      </div>
+    </div>
+    <div style="display: flex; flex: 1; justify-content: center; align-items: center; flex-direction: column;">
+      <h1 style="color: black; text-align: center; padding: 15px;">Thanks!<br>You will start getting email notifications.</h1>
+      <p style="font-size: 0.9em; color: #000; padding-top: 10px; text-align: center;">You can see live updates (updated every 2 minutes!) using <a href="/index.html">our dashboard.</a></p>
+    </div>
+  </div>
+</body>
+</html>
